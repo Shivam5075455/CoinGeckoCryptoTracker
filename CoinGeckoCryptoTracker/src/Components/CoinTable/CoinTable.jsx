@@ -1,30 +1,36 @@
-import { useEffect, useState } from "react";
+import {useState, useEffect} from "react";
+import { FetchCoinData } from "../../Services/FetchCoinData";
+import {useQuery} from "react-query";
 function CoinTable(){
 
-    const [count, setCount] = useState(0);
+    const [page, setPage] = useState(1);
 
-    async function fetchData() {
+    const {data, isLoading, isError, error} = useQuery(
+        ['coins', page], () => FetchCoinData(page, 'usd'), {
+        retry: 2,
+        retryDelay: 1000,
+        cacheTime: 100 * 60 * 2,
+    });
 
-        // const response = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false');
-        // const response = await fetch('https://api.coingecko.com/api/v3/ping');
-        const response = await fetch('https://jsonplaceholder.typicode.com/todos/1');
-        const data = await response.json();
-        console.log(data);
-        // return data;
+    useEffect(() => {
+        console.log("Data: ", data);
+    }, [data]);
 
+    if(isLoading){
+        return <div>Loading...</div>
     }
 
-    useEffect(() =>{
-        fetchData();
-    }, [])
+    if(isError){
+        return <div>Error: {error.message}</div>
+    }
 
-    return(
+    return (
         <>
-           
+            <h1>Coin Table</h1>
+            <button onClick={() => setPage(page + 1)}>Next Page</button>
+            <p>Current Page: {page}</p>
         </>
     )
-
-
 
 }
 
