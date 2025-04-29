@@ -1,13 +1,15 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { FetchCoinData } from "../../Services/FetchCoinData";
 import { useQuery } from "react-query";
+import { CurrencyContext } from "../../Context/CurrencyContext";
 function CoinTable() {
 
+    const {currency} = useContext(CurrencyContext);
     const [page, setPage] = useState(1);
 
     const { data, isLoading, isError, error } = useQuery(
-        ['coins', page],
-        () => FetchCoinData({page, currency: 'usd'}), {
+        ['coins', page, currency], //if any parameter(coins/page/currency) changes, it will refetch the data
+        () => FetchCoinData({page, currency}), {
         // retry: 2,
         // retryDelay: 1000,
         cacheTime: 100 * 60 * 2,
@@ -40,7 +42,7 @@ function CoinTable() {
                         Coin
                     </div>
                     <div className="basis-[25%]">
-                        Price
+                        Price{`(${currency})`}
                     </div>
                     <div className="basis-[20%]">
                         24hr change
@@ -105,7 +107,7 @@ function CoinTable() {
             </div>
 
             <div>
-                <h1 className="text-3xl text-center text-white">Page: {page}</h1>
+                <h1 className="text-2xl text-end text-white m-5">Page: {page}</h1>
             </div>
         </>
     )
