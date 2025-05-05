@@ -1,21 +1,31 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { FetchCoinData } from "../../Services/FetchCoinData";
 import { useQuery } from "react-query";
-import { CurrencyContext } from "../../Context/CurrencyContext";
+// import { CurrencyContext } from "../../Context/CurrencyContext";
+import currencyStore from '../../State/Store';
+import perPageStore from '../../State/PerPageStore';
+import { useNavigate } from "react-router-dom";
 function CoinTable() {
 
-    const {currency} = useContext(CurrencyContext);
+    const navigate = useNavigate();
+    // const {currency} = useContext(CurrencyContext);
+    const { currency } = currencyStore();
+    const { perPage } = perPageStore(); // Access the global perPage state
     const [page, setPage] = useState(1);
 
     const { data, isLoading, isError, error } = useQuery(
-        ['coins', page, currency], //if any parameter(coins/page/currency) changes, it will refetch the data
-        () => FetchCoinData({page, currency}), {
+        ['coins', page, currency, perPage], //if any parameter(coins/page/currency) changes, it will refetch the data
+        () => FetchCoinData( page, currency, perPage ), {
         // retry: 2,
         // retryDelay: 1000,
         cacheTime: 100 * 60 * 2,
         staleTime: 1000 * 60 * 2,
-        
+
     });
+
+    function handleCoinRedirect(id){
+        navigate(`/details/${id}`)
+    }
 
     // useEffect(() => {
     //     console.log("Data: ", data);
@@ -29,7 +39,7 @@ function CoinTable() {
         return <div>Error: {error.message}</div>
     }
 
-    if(!data || data.length === 0){
+    if (!data || data.length === 0) {
         return <div>No data available</div>
     }
 
@@ -56,8 +66,11 @@ function CoinTable() {
                     {isLoading && <div>Loading...</div>}
                     {data.map((coin) => {
                         return (
-                            <div key={coin.id} className="w-full bg-transparent text-white flex py-4 px-2 font-semibold items-center
-                            justify-between">
+                            <div key={coin.id}
+                             className="w-full bg-transparent text-white flex py-4 px-2 font-semibold items-center
+                            justify-between cursor-pointer"
+                                onClick={() => handleCoinRedirect(coin.id)}
+                            >
 
                                 <div className="flex items-center justify-start gap-3 basis-[35%]">
 
@@ -68,7 +81,6 @@ function CoinTable() {
                                     <div className="flex flex-col">
                                         <div className="text-3xl"> {coin.name}</div>
                                         <div className="text-xl">{coin.symbol}</div>
-
                                     </div>
 
                                 </div>
@@ -88,26 +100,33 @@ function CoinTable() {
 
                 </div>
 
-                    <div className="flex gap-4 justify-center items-center">
-                        <button 
-                            onClick={() => setPage((page-1))}
-                            disabled={page===1}
-                            className="btn btn-primary btn-wide text-white text-2xl"
-                        >
-                            Previous
-                        </button>
-                        <button 
-                            onClick = {()=> setPage((page+1))}
-                            className="btn btn-secondary btn-wide text-white text-2xl"
-                        >
-                            Next
-                        </button>
-                    </div>
+                <div className="flex gap-4 justify-center items-center">
+                    <button
+                        onClick={() => setPage((page - 1))}
+                        disabled={page === 1}
+                        className="btn btn-primary btn-wide text-white text-2xl"
+                    >
+                        Previous
+                    </button>
+                    <button
+                        onClick={() => setPage((page + 1))}
+                        className="btn btn-secondary btn-wide text-white text-2xl"
+                    >
+                        Next
+                    </button>
+                </div>
 
             </div>
 
-            <div>
-                <h1 className="text-2xl text-end text-white m-5">Page: {page}</h1>
+            <div className="flex justify-between">
+
+                <div>
+                    <h1 className="text-2xl text-end text-white m-5">Page: {page}</h1>
+                </div>
+
+                <div>
+                    <h1 className="text-2xl text-end text-white m-5">PerPage: {perPage}</h1>
+                </div>
             </div>
         </>
     )
