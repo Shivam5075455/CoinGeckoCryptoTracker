@@ -2,12 +2,17 @@
 // import {useContext} from "react";
 import currencyStore from "../../State/Store";
 import perPageStore from "../../State/PerPageStore";
+import { useNavigate } from "react-router-dom";
 function Navbar() {
 
     // const {setCurrency} = useContext(CurrencyContext);
     const { setCurrency } = currencyStore();
     const { setPerPage } = perPageStore(); // Access setPerPage to update perPage
+    const navigate = useNavigate();
 
+    function goToHome(){
+        navigate("/");
+    }
     return (
 
         <div className="navbar bg-base-100 shadow-sm">
@@ -52,7 +57,9 @@ function Navbar() {
                 </div>
 
             </div>
-            <div className="navbar-center">
+            <div 
+            onClick={goToHome}
+            className="navbar-center">
                 <a className="btn btn-ghost text-xl">Crypto Tracker</a>
             </div>
             <div className="navbar-end">
