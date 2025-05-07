@@ -10,7 +10,7 @@ function Navbar() {
     const { setPerPage } = perPageStore(); // Access setPerPage to update perPage
     const navigate = useNavigate();
 
-    function goToHome(){
+    function goToHome() {
         navigate("/");
     }
     return (
@@ -47,7 +47,7 @@ function Navbar() {
                     <select name="perPage" id="perPage"
                         onChange={(e) => setPerPage(e.target.value)}
                     >
-                        
+
                         <option value="5">5</option>
                         <option value="10">10</option>
                         <option value="15">15</option>
@@ -57,9 +57,9 @@ function Navbar() {
                 </div>
 
             </div>
-            <div 
-            onClick={goToHome}
-            className="navbar-center">
+            <div
+                onClick={goToHome}
+                className="navbar-center">
                 <a className="btn btn-ghost text-xl">Crypto Tracker</a>
             </div>
             <div className="navbar-end">

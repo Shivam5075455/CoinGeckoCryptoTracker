@@ -7,7 +7,7 @@ import currencyStore from '../State/Store';
 function CoinDetailsPage() {
     const { coinId } = useParams();
     const { currency } = currencyStore();
-    
+
 
     console.log(currency)
 
@@ -75,7 +75,7 @@ function CoinDetailsPage() {
                     </div>
 
 
-                     <div
+                    <div
                         className="flex items-center mb-4 md:mb-0"
                     >
                         <h2
@@ -88,7 +88,7 @@ function CoinDetailsPage() {
                         >
                             {coin?.market_data.current_price[currency.toLowerCase()]}
                         </span>
-                    </div> 
+                    </div>
 
                 </div>
             </div>

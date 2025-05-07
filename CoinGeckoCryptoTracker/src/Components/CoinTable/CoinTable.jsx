@@ -32,7 +32,7 @@ function CoinTable() {
     // }, [data]);
 
     if (isLoading) {
-        return <div>Loading...</div>
+        return <div>Loading coin data...</div>
     }
 
     if (isError) {
