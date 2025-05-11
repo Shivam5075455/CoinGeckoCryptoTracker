@@ -2,6 +2,8 @@ import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { fetchCoinDetails } from "../Services/FetchCoinDetails";
 import currencyStore from '../State/Store';
+import CointInfo from "../Components/CoinInfo/CoinInfo";
+import CointInfoContainer from "../Components/CoinInfo/CoinInfoContainer";
 
 
 function CoinDetailsPage() {
@@ -34,8 +36,6 @@ function CoinDetailsPage() {
             <div>Error: Something went wrong</div>
         )
     }
-
-
 
 
     return (
@@ -94,8 +94,8 @@ function CoinDetailsPage() {
             </div>
 
             {/* right side */}
-            <div className="font-bold md:w-2/3 w-full p-6 ">
-                Coin Information
+            <div className="font-bold md:w-2/3 w-full  ">
+                <CointInfoContainer coinId={coinId}/>
             </div>
         </div>
     )
